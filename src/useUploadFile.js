@@ -11,9 +11,20 @@ export const useUploadFile = () => {
   const [error, setError] = useState();
   const [data, setData] = useState();
 
+  const resetData = () => {
+    setProgress(0);
+    setIsSuccess(false);
+    setIsError(false);
+    setIsLoading(false);
+    setError(null);
+    setData(null);
+  };
+
   const uploadAsync = async (file) => {
     const body = new FormData();
     body.append("File", file);
+
+    resetData();
 
     try {
       setIsLoading(true);

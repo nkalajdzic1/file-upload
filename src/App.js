@@ -49,21 +49,22 @@ const FileDataWrapper = styled.div`
 
 const FileDataItem = styled.div``;
 
-const FileData = ({ file }) => {
-  console.log(file);
-  return (
-    <FileDataWrapper>
-      <FileDataItem>Id: {file.id}</FileDataItem>
-      <FileDataItem>Type: {file.mimeType}</FileDataItem>
-      <FileDataItem>Name: {file.name}</FileDataItem>
-      <FileDataItem>Size: {file.size}</FileDataItem>
-    </FileDataWrapper>
-  );
-};
+const FileData = ({ file }) => (
+  <FileDataWrapper>
+    <FileDataItem>Id: {file.id}</FileDataItem>
+    <FileDataItem>Type: {file.mimeType}</FileDataItem>
+    <FileDataItem>Name: {file.name}</FileDataItem>
+    <FileDataItem>Size: {file.size}</FileDataItem>
+  </FileDataWrapper>
+);
 
 const App = () => {
   const [file, setFile] = useState();
+
+  // hook for handeling file upload to backend
   const { progress, uploadAsync } = useUploadFile();
+
+  // hook to retrieve files from the backend
   const {
     data: fileList,
     isLoading: isLoadingFileList,
@@ -78,7 +79,6 @@ const App = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-
     if (!file) return;
 
     // upload file
@@ -95,13 +95,21 @@ const App = () => {
         <StyledButton type="submit">Upload file</StyledButton>
         <Progress style={{ marginTop: 20 }} progress={progress} />
       </StyledForm>
-      <ListWrapper>
-        {!isLoadingFileList &&
-          fileList?.map((x, i) => <FileData file={x} key={i} />)}
-        {isLoadingFileList && (
-          <div style={{ textAlign: "center" }}>Loading...</div>
-        )}
-      </ListWrapper>
+      {!isLoadingFileList && fileList?.length === 0 && (
+        <div style={{ marginTop: 50, textAlign: "center" }}>
+          No files uploaded yet
+        </div>
+      )}
+      {!isLoadingFileList && fileList?.length !== 0 && (
+        <ListWrapper>
+          {fileList?.map((x, i) => (
+            <FileData file={x} key={i} />
+          ))}
+        </ListWrapper>
+      )}
+      {isLoadingFileList && (
+        <div style={{ marginTop: 50, textAlign: "center" }}>Loading...</div>
+      )}
     </Wrapper>
   );
 };
