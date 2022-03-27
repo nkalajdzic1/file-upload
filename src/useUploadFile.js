@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 import API from "API";
-import { toast } from "react-toastify";
 
 export const useUploadFile = () => {
   const [progress, setProgress] = useState(0);
